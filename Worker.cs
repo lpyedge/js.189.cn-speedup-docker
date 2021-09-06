@@ -31,12 +31,22 @@ namespace JSDXTS
                 RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
                     ? EnvironmentVariableTarget.Machine
                     : EnvironmentVariableTarget.Process);
+            
             //环境变量delay字段存在且可以转化为大于0的int值 
             if (int.TryParse(delayStr, out int delayTemp) && delayTemp > 0)
             {
                 //延迟时间切换为系统内部使用的毫秒数
                 delay = delayTemp * 60000;
             }
+            
+            
+            //环境变量取TZ字段（当前时区）
+            var tzStr = Environment.GetEnvironmentVariable("TZ",
+                RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+                    ? EnvironmentVariableTarget.Machine
+                    : EnvironmentVariableTarget.Process);
+            
+            
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -58,7 +68,7 @@ namespace JSDXTS
 
         private void ts()
         {
-            Console.WriteLine($"js.189.cn-speedup 执行提速操作 [{DateTime.Now.ToLongTimeString()}]");
+            Console.WriteLine($"[{DateTime.Now.ToLongTimeString()}] js.189.cn-speedup 执行提速操作 ");
             try
             {
                 HttpWebUtility wu = new HttpWebUtility();
