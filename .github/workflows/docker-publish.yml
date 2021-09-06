@@ -58,17 +58,5 @@ jobs:
             lpyedge/js.189.cn-speedup:linux-x64 \
             lpyedge/js.189.cn-speedup:linux-arm64 \
             lpyedge/js.189.cn-speedup:linux-arm32          
-            
-          docker manifest annotate lpyedge/js.189.cn-speedup \
-            lpyedge/js.189.cn-speedup:linux-x64 \
-            --os linux --arch x86_64       
-            
-          docker manifest annotate lpyedge/js.189.cn-speedup \
-            lpyedge/js.189.cn-speedup:linux-arm64 \
-            --os linux --arch arm64
-            
-          docker manifest annotate lpyedge/js.189.cn-speedup \
-            lpyedge/js.189.cn-speedup:linux-arm32 \
-            --os linux --arch arm
-            
+          
           docker manifest push lpyedge/js.189.cn-speedup
