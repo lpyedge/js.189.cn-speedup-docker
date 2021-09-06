@@ -6,10 +6,10 @@ name: Docker
 # documentation.
 
 on:
-  push:
-    branches: [ release ]
-    # Publish semver tags as releases.
-    tags: [ 'v*.*.*' ]
+  release:
+    types: [published]
+#   watch:
+#     types: [started]  
 
 env:
   # Use docker.io for Docker Hub if empty
@@ -17,10 +17,10 @@ env:
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}
 
-
 jobs:
   build:
     runs-on: ubuntu-latest
+#     if: github.event.repository.owner.id == github.event.sender.id  # 自己点的 star
     permissions:
       contents: read
       packages: write
