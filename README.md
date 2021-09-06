@@ -14,12 +14,9 @@
 ### 运行
 
 ```
-
 docker run -d \
   --name=js.189.cn-speedup \
   -e delay=30 `#optional` \
   --restart unless-stopped \
   lpyedge/js.189.cn-speedup
-
-
 ```
