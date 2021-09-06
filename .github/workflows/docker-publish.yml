@@ -25,6 +25,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: github.event.repository.owner.id == github.event.sender.id  # 自己点的 start
     permissions:
       contents: read
       packages: write
@@ -53,4 +54,4 @@ jobs:
           platforms: linux/amd64,linux/arm,linux/arm64
           push: true
           tags: |
-            lpyedge/test:latest
+            lpyedge/test
