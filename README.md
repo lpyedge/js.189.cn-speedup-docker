@@ -21,7 +21,6 @@ https://hub.docker.com/r/lpyedge/js.189.cn-speedup
 ```
 docker run -d \
   --name=js.189.cn-speedup \
-  -e interval=30 `#optional` \
   --restart unless-stopped \
   lpyedge/js.189.cn-speedup
 ```
