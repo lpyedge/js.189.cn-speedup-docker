@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -16,10 +14,16 @@ namespace JSDXTS
     public class Worker : BackgroundService
     {
         /// <summary>
-        /// 每半小时执行一次
+        /// 固定间隔 每半小时执行一次
+        /// 值为0 则根据时长自动间隔时间取请求加速
         /// </summary>
-        private static int interval = 1800000;
-   
+        private static int interval = 0;
+        
+        /// <summary>
+        /// 延迟执行毫秒数
+        /// </summary>
+        private int delay = 0;
+        
         private readonly ILogger<Worker> _logger;
         
         public Worker(ILogger<Worker> logger)
@@ -32,8 +36,8 @@ namespace JSDXTS
                     ? EnvironmentVariableTarget.Machine
                     : EnvironmentVariableTarget.Process);
             
-            //环境变量interval字段存在且可以转化为大于0的int值 
-            if (int.TryParse(intervalStr, out int intervalTemp) && intervalTemp > 0)
+            //环境变量interval字段存在且可以转化为大于等于0的int值 
+            if (int.TryParse(intervalStr, out int intervalTemp) && intervalTemp >= 0)
             {
                 //延迟时间切换为系统内部使用的毫秒数
                 interval = intervalTemp * 60000;
@@ -48,7 +52,7 @@ namespace JSDXTS
 
                 ts();
                 
-                await Task.Delay(interval, stoppingToken);
+                await Task.Delay(delay, stoppingToken);
             }
         }
 
@@ -56,7 +60,7 @@ namespace JSDXTS
             new Regex(@"<input\s+type=""hidden""\s+id=""HfUserAccount""\s+value=""([-\d]+)""\s*/>",RegexOptions.Compiled|RegexOptions.IgnoreCase);
         private Regex RegexAreaCode =
             new Regex(@"<input\s+type=""hidden""\s+id=""HfAreaCode""\s+value=""([-\d]+)""\s*/>",RegexOptions.Compiled|RegexOptions.IgnoreCase);
-
+        
         private void ts()
         {
             Console.WriteLine($"[{DateTime.Now.ToLongTimeString()}] js.189.cn-speedup 执行提速操作 ");
@@ -98,17 +102,47 @@ namespace JSDXTS
                         var jsonStr1 = wu.Response(new Uri("https://ts.js.vnet.cn/speed/beginExperiences"),
                             HttpWebUtility.HttpMethod.Post,
                             data1,null,Encoding.UTF8);
+
+                        if (interval > 0)
+                        {
+                            delay = interval;
+                        }
+                        else
+                        {
+                            //根据日志发现实际提速时长为一小时55分钟
+                            //这里设置为一小时54分钟后开始再次请求加速
+                            delay = 6840000;
+                        }
                         
                         Console.WriteLine(jsonStr1);
                     }
                     else
-                    {
+                    { 
+                        if (interval > 0)
+                        {
+                            delay = interval;
+                        }
+                        else
+                        {
+                            //自动请求加速间隔30秒请求一次
+                            delay = 30000;
+                        }
                         Console.WriteLine(jsonStr0);
                     }
                 }
+                else
+                {
+                    //请求数据不正常
+                    //延迟30分钟后再请求
+                    delay = 1800000;
+                    Console.WriteLine("加速接口异常，30分钟后再次请求！");
+                }
             }
             catch (Exception e)
-            {
+            { 
+                //请求数据不正常
+                //延迟30分钟后再请求
+                delay = 1800000;
                 Console.WriteLine(e.Message);
             }
 
