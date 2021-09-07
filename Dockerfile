@@ -20,7 +20,7 @@ LABEL email="lpyedge#163.com"
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENV TZ=Asia/Shanghai
-ENV delay=30
+ENV interval=30
 
 #修复alpine时区设置的问题
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories; \

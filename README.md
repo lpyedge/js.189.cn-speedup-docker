@@ -9,14 +9,14 @@
 
 | 变量名 | 默认值 | 介绍                             |
 | ------ | ------ | -------------------------------- |
-| delay  | 30     | 每隔多少分钟执行一次，要求大于 0 |
+| interval  | 30     | 每隔多少分钟执行一次，要求大于 0 |
 
 ### 运行
 
 ```
 docker run -d \
   --name=js.189.cn-speedup \
-  -e delay=30 `#optional` \
+  -e interval=30 `#optional` \
   --restart unless-stopped \
   lpyedge/js.189.cn-speedup
 ```

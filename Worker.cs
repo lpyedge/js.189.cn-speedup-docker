@@ -18,7 +18,7 @@ namespace JSDXTS
         /// <summary>
         /// 每半小时执行一次
         /// </summary>
-        private static int delay = 1800000;
+        private static int interval = 1800000;
    
         private readonly ILogger<Worker> _logger;
         
@@ -26,27 +26,18 @@ namespace JSDXTS
         {
             _logger = logger;
             
-            //环境变量取delay字段（延迟请求xx分钟）
-            var delayStr = Environment.GetEnvironmentVariable("delay",
+            //环境变量取interval字段（延迟请求xx分钟）
+            var intervalStr = Environment.GetEnvironmentVariable("interval",
                 RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
                     ? EnvironmentVariableTarget.Machine
                     : EnvironmentVariableTarget.Process);
             
-            //环境变量delay字段存在且可以转化为大于0的int值 
-            if (int.TryParse(delayStr, out int delayTemp) && delayTemp > 0)
+            //环境变量interval字段存在且可以转化为大于0的int值 
+            if (int.TryParse(intervalStr, out int intervalTemp) && intervalTemp > 0)
             {
                 //延迟时间切换为系统内部使用的毫秒数
-                delay = delayTemp * 60000;
+                interval = intervalTemp * 60000;
             }
-            
-            
-            //环境变量取TZ字段（当前时区）
-            var tzStr = Environment.GetEnvironmentVariable("TZ",
-                RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-                    ? EnvironmentVariableTarget.Machine
-                    : EnvironmentVariableTarget.Process);
-            
-            
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -57,7 +48,7 @@ namespace JSDXTS
 
                 ts();
                 
-                await Task.Delay(delay, stoppingToken);
+                await Task.Delay(interval, stoppingToken);
             }
         }
 
