@@ -66,76 +66,77 @@ namespace JSDXTS
             Console.WriteLine($"[{DateTime.Now.ToLongTimeString()}] js.189.cn-speedup 执行提速操作 ");
             try
             {
-                HttpWebUtility wu = new HttpWebUtility();
-                var htmlStr= wu.Response(new Uri("https://ts.js.vnet.cn/speed/index"));
-                var matchUserAccount= RegexUserAccount.Match(htmlStr);
-                var matchAreaCode= RegexAreaCode.Match(htmlStr);
-                if (matchUserAccount.Success && matchUserAccount.Groups[1].Success
-                && matchAreaCode.Success && matchAreaCode.Groups[1].Success)
+                using (HttpWebUtility wu = new HttpWebUtility())
                 {
-                    Console.WriteLine($"地区：{matchAreaCode.Groups[1].Value}");
-                    Console.WriteLine($"账号：{matchUserAccount.Groups[1].Value}");
+                    var htmlStr= wu.Response(new Uri("https://ts.js.vnet.cn/speed/index"));
+                    var matchUserAccount= RegexUserAccount.Match(htmlStr);
+                    var matchAreaCode= RegexAreaCode.Match(htmlStr);
+                    if (matchUserAccount.Success && matchUserAccount.Groups[1].Success
+                    && matchAreaCode.Success && matchAreaCode.Groups[1].Success)
+                    {
+                        Console.WriteLine($"地区：{matchAreaCode.Groups[1].Value}");
+                        Console.WriteLine($"账号：{matchUserAccount.Groups[1].Value}");
 
-                    wu.Accpet = "application/json; charset=UTF-8";
-                    //wu.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-                    
-                    var data0 = new Dictionary<string, string>()
-                    {
-                        ["action"]="ExperiencesSpeedModel",
-                        ["isPostBk"]="1",
-                        ["UserAccount"]=matchUserAccount.Groups[1].Value,
-                        ["AreaCode"]=matchAreaCode.Groups[1].Value
-                    };
-                    var jsonStr0 = wu.Response(new Uri("https://ts.js.vnet.cn/speed/experiencesSpeedModel"),
-                        HttpWebUtility.HttpMethod.Post,
-                        data0,null,Encoding.UTF8);
-                    
-                    if (jsonStr0.Contains("OK"))
-                    {
-                        var data1 = new Dictionary<string, string>()
+                        wu.Accpet = "application/json; charset=UTF-8";
+                        //wu.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
+                        
+                        var data0 = new Dictionary<string, string>()
                         {
-                            ["action"]="ExperiencesSpeedBegin",
+                            ["action"]="ExperiencesSpeedModel",
                             ["isPostBk"]="1",
                             ["UserAccount"]=matchUserAccount.Groups[1].Value,
                             ["AreaCode"]=matchAreaCode.Groups[1].Value
                         };
-                        var jsonStr1 = wu.Response(new Uri("https://ts.js.vnet.cn/speed/beginExperiences"),
+                        var jsonStr0 = wu.Response(new Uri("https://ts.js.vnet.cn/speed/experiencesSpeedModel"),
                             HttpWebUtility.HttpMethod.Post,
-                            data1,null,Encoding.UTF8);
-
-                        if (interval > 0)
+                            data0,null,Encoding.UTF8);
+                        
+                        if (jsonStr0.Contains("OK"))
                         {
-                            delay = interval;
+                            var data1 = new Dictionary<string, string>()
+                            {
+                                ["action"]="ExperiencesSpeedBegin",
+                                ["isPostBk"]="1",
+                                ["UserAccount"]=matchUserAccount.Groups[1].Value,
+                                ["AreaCode"]=matchAreaCode.Groups[1].Value
+                            };
+                            var jsonStr1 = wu.Response(new Uri("https://ts.js.vnet.cn/speed/beginExperiences"),
+                                HttpWebUtility.HttpMethod.Post,
+                                data1,null,Encoding.UTF8);
+
+                            if (interval > 0)
+                            {
+                                delay = interval;
+                            }
+                            else
+                            {
+                                //这里设置为一小时59分钟后开始再次请求加速
+                                delay = 7140000;
+                            }
+                            
+                            Console.WriteLine(jsonStr1);
                         }
                         else
-                        {
-                            //根据日志发现实际提速时长为一小时55分钟
-                            //这里设置为一小时54分钟后开始再次请求加速
-                            delay = 6840000;
+                        { 
+                            if (interval > 0)
+                            {
+                                delay = interval;
+                            }
+                            else
+                            {
+                                //自动请求加速间隔30秒请求一次
+                                delay = 30000;
+                            }
+                            Console.WriteLine(jsonStr0);
                         }
-                        
-                        Console.WriteLine(jsonStr1);
                     }
                     else
-                    { 
-                        if (interval > 0)
-                        {
-                            delay = interval;
-                        }
-                        else
-                        {
-                            //自动请求加速间隔30秒请求一次
-                            delay = 30000;
-                        }
-                        Console.WriteLine(jsonStr0);
+                    {
+                        //请求数据不正常
+                        //延迟30分钟后再请求
+                        delay = 1800000;
+                        Console.WriteLine("加速接口异常，30分钟后再次请求！");
                     }
-                }
-                else
-                {
-                    //请求数据不正常
-                    //延迟30分钟后再请求
-                    delay = 1800000;
-                    Console.WriteLine("加速接口异常，30分钟后再次请求！");
                 }
             }
             catch (Exception e)
