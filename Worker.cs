@@ -60,6 +60,8 @@ namespace JSDXTS
             new Regex(@"<input\s+type=""hidden""\s+id=""HfUserAccount""\s+value=""([-\d]+)""\s*/>",RegexOptions.Compiled|RegexOptions.IgnoreCase);
         private Regex RegexAreaCode =
             new Regex(@"<input\s+type=""hidden""\s+id=""HfAreaCode""\s+value=""([-\d]+)""\s*/>",RegexOptions.Compiled|RegexOptions.IgnoreCase);
+
+        private Regex RegexExpire = new Regex(@"(\d+)点(\d+)分", RegexOptions.Compiled);
         
         private void ts()
         {
@@ -113,8 +115,8 @@ namespace JSDXTS
                             }
                             else
                             {
-                                //这里设置为1小时58分30秒后开始再次请求加速
-                                delay = 7110000;
+                                //这里设置为1小时59分31秒后开始再次请求加速
+                                delay = 7171000;
                             }
                             
                             Console.WriteLine(jsonStr1);
@@ -127,8 +129,51 @@ namespace JSDXTS
                             }
                             else
                             {
-                                //自动请求加速间隔30秒请求一次
-                                delay = 30000;
+                                // [13:47:33] js.189.cn-speedup 执行提速操作
+                                // 地区：0516
+                                // 账号：17312860144
+                                // {"result":"您已提速成功，提速期间不要下线哦！"}
+                                //
+                                // [15:41:37] js.189.cn-speedup 执行提速操作
+                                // 地区：0516
+                                // 账号：17312860144
+                                // {"result":"亲，您今天的下行体验时间将于15点44分到期"}
+
+                                //实际提示的到期时间比真实到期时间提前了3分钟
+                                //这里的代码解决提速期间程序重启启动造成的频繁请求的错误
+                                var matchExpire = RegexExpire.Match(jsonStr0);
+                                if (matchExpire.Success && matchExpire.Groups[1].Success &&
+                                    matchExpire.Groups[2].Success)
+                                {
+                                    var hour = int.Parse( matchExpire.Groups[1].Value);
+                                    var minute = int.Parse( matchExpire.Groups[2].Value);
+                                    //系统返回的过期时间
+                                    var dateExpire = DateTime.Now.Date.AddHours(hour).AddMinutes(minute);
+                                    //过期时间小于当前时间说明跨天了，日期+1
+                                    if (dateExpire < DateTime.Now)
+                                    {
+                                        dateExpire = dateExpire.AddDays(1);
+                                    }
+                                    
+                                    if (DateTime.Now >= dateExpire)
+                                    {
+                                        //自动请求加速间隔30秒请求一次
+                                        delay = 30000;
+                                    }
+                                    else
+                                    {
+                                        //这里获取真实到期时间的毫秒间隔
+                                        //鉴于目前系统返回的到期时间不准确，提前了3分钟，这里取到期时间放慢了2分钟
+                                        delay = (int)(dateExpire.AddMinutes(2)).Subtract(DateTime.Now).TotalMilliseconds;
+                                    }
+                                }
+                                else
+                                {
+                                    //请求数据不正常
+                                    //延迟30分钟后再请求
+                                    delay = 1800000;
+                                    Console.WriteLine("加速接口异常，30分钟后再次请求！");
+                                }
                             }
                             Console.WriteLine(jsonStr0);
                         }
