@@ -68,6 +68,9 @@ namespace JSDXTS
             {
                 using (HttpWebUtility wu = new HttpWebUtility())
                 {
+                    wu.UserAgent =
+                        "Mozilla/5.0 (Macintosh; Intel Mac OS X 11_5_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36 Edg/92.0.902.62";
+                    
                     var htmlStr= wu.Response(new Uri("https://ts.js.vnet.cn/speed/index"));
                     var matchUserAccount= RegexUserAccount.Match(htmlStr);
                     var matchAreaCode= RegexAreaCode.Match(htmlStr);
@@ -110,8 +113,8 @@ namespace JSDXTS
                             }
                             else
                             {
-                                //这里设置为一小时59分钟后开始再次请求加速
-                                delay = 7140000;
+                                //这里设置为1小时58分30秒后开始再次请求加速
+                                delay = 7110000;
                             }
                             
                             Console.WriteLine(jsonStr1);
