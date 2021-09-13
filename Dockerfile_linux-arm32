@@ -18,7 +18,7 @@ RUN dotnet publish "JSDXTS.csproj" -c Release -o /app/publish \
 
 FROM mcr.microsoft.com/dotnet/runtime-deps:5.0-alpine3.13-arm32v7 AS final
 MAINTAINER "lpyedge"
-LABEL version="0.5"
+LABEL version="0.7.1"
 LABEL name="js.189.cn-speedup"
 LABEL url="https://hub.docker.com/repository/docker/lpyedge/js.189.cn-speedup"
 LABEL email="lpyedge#163.com"
@@ -28,6 +28,7 @@ COPY --from=publish /app/publish .
 ENV TZ=Asia/Shanghai
 ENV interval=0
 
+#包安装源切换到阿里云
 #修复alpine时区设置的问题
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories; \
     apk --update add tzdata;

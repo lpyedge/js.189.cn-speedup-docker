@@ -122,7 +122,8 @@ namespace JSDXTS
                             Console.WriteLine(jsonStr1);
                         }
                         else
-                        { 
+                        {
+                            Console.WriteLine(jsonStr0);
                             if (interval > 0)
                             {
                                 delay = interval;
@@ -172,10 +173,9 @@ namespace JSDXTS
                                     //请求数据不正常
                                     //延迟30分钟后再请求
                                     delay = 1800000;
-                                    Console.WriteLine("加速接口异常，30分钟后再次请求！");
+                                    Console.WriteLine("加速接口返回数据异常，30分钟后再次请求！");
                                 }
                             }
-                            Console.WriteLine(jsonStr0);
                         }
                     }
                     else
@@ -183,7 +183,7 @@ namespace JSDXTS
                         //请求数据不正常
                         //延迟30分钟后再请求
                         delay = 1800000;
-                        Console.WriteLine("加速接口异常，30分钟后再次请求！");
+                        Console.WriteLine("加速接口无法连接，30分钟后再次请求！");
                     }
                 }
             }
