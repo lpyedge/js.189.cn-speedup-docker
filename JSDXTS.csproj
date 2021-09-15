@@ -16,6 +16,8 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="FluentScheduler" Version="5.5.1" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="5.0.0" />
     </ItemGroup>
 </Project>
