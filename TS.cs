@@ -20,9 +20,9 @@ namespace JSDXTS
         
         /// <summary>
         ///     下次可以提速时间 延迟执行秒数
-        /// **官方提示2小时,实际提前 1分40秒 可以提速，这里调整到117分钟18秒
+        /// 提速2小时，这里调整到119分钟18秒
         /// </summary>
-        private const int _speedUpLongInterval =  (int)(117.3 * 60);
+        private const int _speedUpLongInterval =  (int)(119.3 * 60);
 
         private static AccountInfo _accountInfo;
 
@@ -155,9 +155,9 @@ namespace JSDXTS
                     }
                     else
                     {
-                        LogSuccess(dateExpire.AddMinutes(2));
-                        //目前系统返回的到期时间不准确，提前了3分钟**
-                        var delay = (int) dateExpire.AddMinutes(2).Subtract(DateTime.Now).TotalSeconds;
+                        LogSuccess(dateExpire.AddMinutes(3));
+                        //目前系统返回的到期时间不准确，提前了3-4分钟**
+                        var delay = (int) dateExpire.AddMinutes(3).Subtract(DateTime.Now).TotalSeconds;
                         JobManager.AddJob(DoTaskLong,
                             s => s.ToRunOnceIn(delay).Seconds()
                         );
