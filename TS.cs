@@ -16,12 +16,13 @@ namespace JSDXTS
         /// <summary>
         ///     接近可以提速时间 延迟执行秒数
         /// </summary>
-        private const int _speedUpShortInterval = 25;
+        private const int _speedUpShortInterval = 15;
         
         /// <summary>
-        ///     接近可以提速时间 延迟执行秒数
+        ///     下次可以提速时间 延迟执行秒数
+        /// **官方提示2小时,实际提前 1分40秒 可以提速，这里调整到117分钟18秒
         /// </summary>
-        private const int _speedUpLongInterval =  119 * 60;
+        private const int _speedUpLongInterval =  (int)(117.3 * 60);
 
         private static AccountInfo _accountInfo;
 
@@ -141,17 +142,9 @@ namespace JSDXTS
                     var minute = int.Parse(matchExpire.Groups[2].Value);
                     //系统返回的过期时间
                     var dateExpire = DateTime.Now.Date.AddHours(hour).AddMinutes(minute);
-                    //过期时间小于当前时间说明跨天了，日期+1
-                    if (dateExpire < DateTime.Now) dateExpire = dateExpire.AddDays(1);
-
-
-                    
-                    // [09-15 14:36:01] 成功提速至 200M/50M (下行/上行)
-                    // 提速到期时间 09-15 16:30
-                    //[09-15 16:30:01] 成功提速至 200M/50M (下行/上行)
-                    // 提速到期时间 09-16 16:30
-                    //获取返回时间设置下次执行时已经过期，造成执行了上面的天数+1的代码出现错误
-                    //dateExpire不再增加2分钟测试看看
+                    //过期时间小于当前时间超过20小时+ 说明跨天了，日期+1
+                    if (DateTime.Now.Subtract(dateExpire).TotalHours > 20) 
+                        dateExpire = dateExpire.AddDays(1);
                     
                     if (DateTime.Now >= dateExpire)
                     {
@@ -163,8 +156,8 @@ namespace JSDXTS
                     else
                     {
                         LogSuccess(dateExpire.AddMinutes(2));
-                        //鉴于目前系统返回的到期时间不准确，提前了2-3分钟**
-                        var delay = (int) dateExpire.Subtract(DateTime.Now).TotalSeconds;
+                        //目前系统返回的到期时间不准确，提前了3分钟**
+                        var delay = (int) dateExpire.AddMinutes(2).Subtract(DateTime.Now).TotalSeconds;
                         JobManager.AddJob(DoTaskLong,
                             s => s.ToRunOnceIn(delay).Seconds()
                         );
@@ -185,7 +178,9 @@ namespace JSDXTS
                     s => s.ToRunOnceIn(_errorInterval).Seconds()
                 );
             }
-        }  public static void DoTaskShort()
+        }  
+        
+        public static void DoTaskShort()
         {
             if (_accountInfo != null)
             {
