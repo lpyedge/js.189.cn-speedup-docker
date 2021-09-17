@@ -12,17 +12,17 @@ namespace JSDXTS
         ///     执行错误 延迟执行秒数
         /// </summary>
         private const int _errorInterval = 15 * 60;
-        
+
         /// <summary>
         ///     接近可以提速时间 延迟执行秒数
         /// </summary>
         private const int _speedUpShortInterval = 15;
-        
+
         /// <summary>
         ///     下次可以提速时间 延迟执行秒数
-        /// 提速2小时，这里调整到119分钟18秒
+        ///     提速2小时，这里调整到119分钟18秒
         /// </summary>
-        private const int _speedUpLongInterval =  (int)(119.3 * 60);
+        private const int _speedUpLongInterval = (int) (119.3 * 60);
 
         private static AccountInfo _accountInfo;
 
@@ -38,7 +38,7 @@ namespace JSDXTS
 
         private static HttpWebUtility _httpWebUtility()
         {
-            return new()
+            return new HttpWebUtility
             {
                 UserAgent =
                     "Mozilla/5.0 (Macintosh; Intel Mac OS X 11_5_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36 Edg/92.0.902.62"
@@ -47,7 +47,6 @@ namespace JSDXTS
 
         public static AccountInfo GetAccountInfo()
         {
-            AccountInfo res = null;
             using (var wu = _httpWebUtility())
             {
                 wu.Accpet =
@@ -57,14 +56,13 @@ namespace JSDXTS
                 var matchAreaCode = RegexAreaCode.Match(htmlStr);
                 if (matchUserAccount.Success && matchUserAccount.Groups[1].Success
                                              && matchAreaCode.Success && matchAreaCode.Groups[1].Success)
-                    res = new AccountInfo
+                    return new AccountInfo
                     {
                         AreaCode = matchAreaCode.Groups[1].Value,
                         UserAccount = matchUserAccount.Groups[1].Value
                     };
             }
-
-            return res;
+            return null;
         }
 
         public static string GetAccountStatus(AccountInfo accountInfo)
@@ -72,7 +70,7 @@ namespace JSDXTS
             using (var wu = _httpWebUtility())
             {
                 wu.Accpet =
-                    "application/json, text/javascript, */*; q=0.01"; //; charset=UTF-8
+                    "application/json, text/javascript, */*; q=0.01";
 
                 var data = new Dictionary<string, string>
                 {
@@ -95,7 +93,7 @@ namespace JSDXTS
             using (var wu = _httpWebUtility())
             {
                 wu.Accpet =
-                    "application/json, text/javascript, */*; q=0.01"; //; charset=UTF-8
+                    "application/json, text/javascript, */*; q=0.01";
 
                 var data = new Dictionary<string, string>
                 {
@@ -143,9 +141,9 @@ namespace JSDXTS
                     //系统返回的过期时间
                     var dateExpire = DateTime.Now.Date.AddHours(hour).AddMinutes(minute);
                     //过期时间小于当前时间超过20小时+ 说明跨天了，日期+1
-                    if (DateTime.Now.Subtract(dateExpire).TotalHours > 20) 
+                    if (DateTime.Now.Subtract(dateExpire).TotalHours > 20)
                         dateExpire = dateExpire.AddDays(1);
-                    
+
                     if (DateTime.Now >= dateExpire)
                     {
                         LogWait();
@@ -178,8 +176,8 @@ namespace JSDXTS
                     s => s.ToRunOnceIn(_errorInterval).Seconds()
                 );
             }
-        }  
-        
+        }
+
         public static void DoTaskShort()
         {
             if (_accountInfo != null)
@@ -222,19 +220,21 @@ namespace JSDXTS
 
         private static void LogSuccess(DateTime dateExpire)
         {
-            Console.WriteLine($"[{DateTime.Now.ToString("MM-dd HH:mm:ss")}] 成功提速至 200M/50M (下行/上行)\n提速到期时间 {dateExpire.ToString("MM-dd HH:mm")}\n\n");
-        }
-        private static void LogWait()
-        {
-            Console.WriteLine($"[{DateTime.Now.ToString("MM-dd HH:mm:ss")}] 提速重试中\n\n");
-        }
-        private static void LogError(string errorMsg)
-        {
-            Console.WriteLine($"[{DateTime.Now.ToString("MM-dd HH:mm:ss")}] 提速失败\n错误内容 {errorMsg}\n\n");
+            Console.WriteLine(
+                $"[{DateTime.Now.ToString("MM-dd HH:mm:ss")}] 成功提速至 200M/50M (下行/上行)\n提速到期时间 {dateExpire.ToString("MM-dd HH:mm")}\n");
         }
 
-      
-        
+        private static void LogWait()
+        {
+            Console.WriteLine($"[{DateTime.Now.ToString("MM-dd HH:mm:ss")}] 提速重试中");
+        }
+
+        private static void LogError(string errorMsg)
+        {
+            Console.WriteLine($"[{DateTime.Now.ToString("MM-dd HH:mm:ss")}] 提速失败\n错误内容 {errorMsg}\n");
+        }
+
+
         public class AccountInfo
         {
             public string AreaCode { get; set; }
