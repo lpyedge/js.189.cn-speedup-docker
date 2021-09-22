@@ -9,8 +9,6 @@ Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|x64 = Debug|x64
-		linux-64|Any CPU = linux-64|Any CPU
-		linux-64|x64 = linux-64|x64
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 	EndGlobalSection
@@ -19,10 +17,6 @@ Global
 		{AD517255-5BEC-4E52-B6E4-E5E5B4D2F9C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD517255-5BEC-4E52-B6E4-E5E5B4D2F9C0}.Debug|x64.ActiveCfg = Debug|x64
 		{AD517255-5BEC-4E52-B6E4-E5E5B4D2F9C0}.Debug|x64.Build.0 = Debug|x64
-		{AD517255-5BEC-4E52-B6E4-E5E5B4D2F9C0}.linux-64|Any CPU.ActiveCfg = linux-64|Any CPU
-		{AD517255-5BEC-4E52-B6E4-E5E5B4D2F9C0}.linux-64|Any CPU.Build.0 = linux-64|Any CPU
-		{AD517255-5BEC-4E52-B6E4-E5E5B4D2F9C0}.linux-64|x64.ActiveCfg = linux-64|x64
-		{AD517255-5BEC-4E52-B6E4-E5E5B4D2F9C0}.linux-64|x64.Build.0 = linux-64|x64
 		{AD517255-5BEC-4E52-B6E4-E5E5B4D2F9C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AD517255-5BEC-4E52-B6E4-E5E5B4D2F9C0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AD517255-5BEC-4E52-B6E4-E5E5B4D2F9C0}.Release|x64.ActiveCfg = Release|x64
