@@ -14,7 +14,9 @@ namespace JSDXTS
             JobManager.AddJob(TS.DoTaskLong,
                 s => s.ToRunNow()
             );
-
+            
+            Console.WriteLine($"js.189.cn-speedup(ver {System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString()})");
+            
             Host.CreateDefaultBuilder()
                 .Build().Run();
         }
