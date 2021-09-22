@@ -101,12 +101,6 @@
           <option name="imageTag" value="lpyedge/js.189.cn-speedup" />
           <option name="containerName" value="js.189.cn-speedup" />
           <option name="envVars">
-            <list>
-              <DockerEnvVarImpl>
-                <option name="name" value="delay" />
-                <option name="value" value="15" />
-              </DockerEnvVarImpl>
-            </list>
           </option>
           <option name="commandLineOptions" value="--restart=unless-stopped" />
           <option name="showCommandPreview" value="true" />
@@ -121,12 +115,6 @@
           <option name="imageTag" value="lpyedge/js.189.cn-speedup:linux-arm32" />
           <option name="containerName" value="js.189.cn-speedup" />
           <option name="envVars">
-            <list>
-              <DockerEnvVarImpl>
-                <option name="name" value="delay" />
-                <option name="value" value="15" />
-              </DockerEnvVarImpl>
-            </list>
           </option>
           <option name="commandLineOptions" value="--restart=unless-stopped" />
           <option name="showCommandPreview" value="true" />
@@ -141,12 +129,6 @@
           <option name="imageTag" value="lpyedge/js.189.cn-speedup:linux-arm64" />
           <option name="containerName" value="js.189.cn-speedup" />
           <option name="envVars">
-            <list>
-              <DockerEnvVarImpl>
-                <option name="name" value="delay" />
-                <option name="value" value="15" />
-              </DockerEnvVarImpl>
-            </list>
           </option>
           <option name="commandLineOptions" value="--restart=unless-stopped" />
           <option name="showCommandPreview" value="true" />
@@ -161,12 +143,6 @@
           <option name="imageTag" value="lpyedge/js.189.cn-speedup:linux-x64" />
           <option name="containerName" value="js.189.cn-speedup" />
           <option name="envVars">
-            <list>
-              <DockerEnvVarImpl>
-                <option name="name" value="delay" />
-                <option name="value" value="15" />
-              </DockerEnvVarImpl>
-            </list>
           </option>
           <option name="commandLineOptions" value="--restart=unless-stopped" />
           <option name="showCommandPreview" value="true" />
