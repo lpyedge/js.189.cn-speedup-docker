@@ -1,4 +1,4 @@
-﻿FROM mcr.microsoft.com/dotnet/sdk:5.0-alpine AS build
+﻿FROM mcr.microsoft.com/dotnet/sdk:6.0-alpine AS build
 WORKDIR /src
 COPY ["JSDXTS.csproj", "./"]
 RUN dotnet restore "JSDXTS.csproj"
@@ -10,9 +10,9 @@ FROM build AS publish
 RUN dotnet publish "JSDXTS.csproj" -c Release  -o /app/publish \
     --self-contained false 
 
-FROM mcr.microsoft.com/dotnet/runtime:5.0-alpine AS final
+FROM mcr.microsoft.com/dotnet/runtime:6.0-alpine AS final
 MAINTAINER "lpyedge"
-LABEL version="0.5"
+LABEL version="0.x.x"
 LABEL name="js.189.cn-speedup"
 LABEL url="https://hub.docker.com/repository/docker/lpyedge/js.189.cn-speedup"
 LABEL email="lpyedge#163.com"
