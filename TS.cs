@@ -41,7 +41,8 @@ namespace JSDXTS
             return new HttpWebUtility
             {
                 UserAgent =
-                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 11_5_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36 Edg/92.0.902.62"
+                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 11_5_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36 Edg/92.0.902.62",
+                
             };
         }
 
@@ -49,9 +50,8 @@ namespace JSDXTS
         {
             using (var wu = _httpWebUtility())
             {
-                wu.Accpet =
-                    "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9";
-                var htmlStr = wu.Response(new Uri("https://ts.js.vnet.cn/speed/index"));
+                wu.Accpet = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9";
+                var htmlStr = wu.ResponseAsync(new Uri("https://ts.js.vnet.cn/speed/index")).Result;
                 var matchUserAccount = RegexUserAccount.Match(htmlStr);
                 var matchAreaCode = RegexAreaCode.Match(htmlStr);
                 if (matchUserAccount.Success && matchUserAccount.Groups[1].Success
@@ -72,7 +72,7 @@ namespace JSDXTS
                 wu.Accpet =
                     "application/json, text/javascript, */*; q=0.01";
 
-                var data = new Dictionary<string, string>
+                var data = new Dictionary<string, dynamic>
                 {
                     ["action"] = "ExperiencesSpeedModel",
                     ["isPostBk"] = "1",
@@ -80,9 +80,9 @@ namespace JSDXTS
                     ["AreaCode"] = accountInfo.AreaCode
                 };
 
-                var jsonStr = wu.Response(new Uri("https://ts.js.vnet.cn/speed/experiencesSpeedModel"),
-                    HttpWebUtility.HttpMethod.Post,
-                    data, null, Encoding.UTF8);
+                var jsonStr = wu.ResponseAsync(new Uri("https://ts.js.vnet.cn/speed/experiencesSpeedModel"),
+                    HttpWebUtility.HttpMethod.POST,
+                    data).Result;
 
                 return jsonStr;
             }
@@ -95,7 +95,7 @@ namespace JSDXTS
                 wu.Accpet =
                     "application/json, text/javascript, */*; q=0.01";
 
-                var data = new Dictionary<string, string>
+                var data = new Dictionary<string, dynamic>
                 {
                     ["action"] = "ExperiencesSpeedBegin",
                     ["isPostBk"] = "1",
@@ -103,9 +103,9 @@ namespace JSDXTS
                     ["AreaCode"] = accountInfo.AreaCode
                 };
 
-                var jsonStr = wu.Response(new Uri("https://ts.js.vnet.cn/speed/beginExperiences"),
-                    HttpWebUtility.HttpMethod.Post,
-                    data, null, Encoding.UTF8);
+                var jsonStr = wu.ResponseAsync(new Uri("https://ts.js.vnet.cn/speed/beginExperiences"),
+                    HttpWebUtility.HttpMethod.POST,
+                    data).Result;
 
                 return jsonStr;
             }
