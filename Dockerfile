@@ -26,4 +26,9 @@ ENV interval=30
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories; \
     apk --update add tzdata;
 
+#进程状态检查
+COPY healthcheck.sh .
+RUN chmod -R 777 /app/healthcheck.sh
+HEALTHCHECK --interval=15m --timeout=5s --start-period=30s CMD /app/healthcheck.sh JSDXTS
+
 ENTRYPOINT ["/app/JSDXTS"]

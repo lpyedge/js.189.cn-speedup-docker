@@ -1,4 +1,4 @@
-1.创建住版本的manifest，添加不同平台的镜像
+1.创建主版本的manifest，添加不同平台的镜像
 
 docker manifest create lpyedge/js.189.cn-speedup \
       lpyedge/js.189.cn-speedup:linux-x64 \

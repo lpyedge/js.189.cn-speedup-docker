@@ -17,8 +17,7 @@ RUN dotnet publish "JSDXTS.csproj" -c Release -o /app/publish \
 #https://hub.docker.com/_/microsoft-dotnet-runtime-deps
 
 FROM mcr.microsoft.com/dotnet/runtime-deps:6.0-alpine-arm32v7 AS final
-MAINTAINER "lpyedge"
-LABEL version="0.7.3"
+LABEL version="0.7.4"
 LABEL name="js.189.cn-speedup"
 LABEL url="https://hub.docker.com/repository/docker/lpyedge/js.189.cn-speedup"
 LABEL email="lpyedge#163.com"
@@ -32,5 +31,10 @@ ENV interval=0
 #修复alpine时区设置的问题
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories; \
     apk --update add tzdata;
+
+#进程状态检查
+COPY healthcheck.sh .
+RUN chmod -R 777 /app/healthcheck.sh
+HEALTHCHECK --interval=15m --timeout=5s --start-period=30s CMD /app/healthcheck.sh JSDXTS
 
 ENTRYPOINT ["/app/JSDXTS"]
