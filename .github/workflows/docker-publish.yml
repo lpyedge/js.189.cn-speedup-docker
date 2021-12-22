@@ -12,10 +12,10 @@ on:
     types: [started]  
 
 env:
-  # Use docker.io for Docker Hub if empty
-  REGISTRY: ghcr.io
-  # github.repository as <account>/<repo>
-  IMAGE_NAME: ${{ github.repository }}
+#  # Use docker.io for Docker Hub if empty
+#  REGISTRY: ghcr.io
+#  # github.repository as <account>/<repo>
+#  IMAGE_NAME: ${{ github.repository }}
   version: 0.7.5
 
 jobs:
@@ -43,15 +43,15 @@ jobs:
         run: |
         
           DOCKER_BUILDKIT=1 docker build --platform linux/amd64 --build-arg version=$version --build-arg RID=x64 \
-            -f Dockerfile_Test -t lpyedge/js.189.cn-speedup:linux-amd64 --rm .
+            -f Dockerfile -t lpyedge/js.189.cn-speedup:linux-amd64 --rm .
           docker push lpyedge/js.189.cn-speedup:linux-amd64
          
           DOCKER_BUILDKIT=1 docker build --platform linux/arm64 --build-arg version=$version --build-arg RID=arm64 \
-            -f Dockerfile_Test -t lpyedge/js.189.cn-speedup:linux-arm64 --rm .
+            -f Dockerfile -t lpyedge/js.189.cn-speedup:linux-arm64 --rm .
           docker push lpyedge/js.189.cn-speedup:linux-arm64
          
           DOCKER_BUILDKIT=1 docker build --platform linux/arm32 --build-arg version=$version --build-arg RID=arm \
-            -f Dockerfile_Test -t lpyedge/js.189.cn-speedup:linux-arm32 --rm .
+            -f Dockerfile -t lpyedge/js.189.cn-speedup:linux-arm32 --rm .
           docker push lpyedge/js.189.cn-speedup:linux-arm32
                    
           docker manifest create lpyedge/js.189.cn-speedup \
