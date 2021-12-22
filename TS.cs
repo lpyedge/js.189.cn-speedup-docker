@@ -6,7 +6,7 @@ using FluentScheduler;
 
 namespace JSDXTS
 {
-    public class TS
+    public static class TS
     {
         /// <summary>
         ///     执行错误 延迟执行秒数
