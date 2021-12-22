@@ -19,7 +19,7 @@ RUN dotnet publish "JSDXTS.csproj" -c Release -o /app/publish \
 #https://m.imooc.com/article/316499
 #https://hub.docker.com/_/microsoft-dotnet-runtime-deps
 
-FROM amd64/alpine:3 AS final
+FROM amd64/alpine:3.14 AS final
 ARG version=0.0.0
 
 LABEL version=${version}

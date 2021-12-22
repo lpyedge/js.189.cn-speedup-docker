@@ -20,7 +20,7 @@ RUN dotnet publish "JSDXTS.csproj" -c Release -o /app/publish \
 #https://docs.microsoft.com/zh-cn/dotnet/core/rid-catalog
 #https://hub.docker.com/_/microsoft-dotnet-runtime-deps
 
-FROM arm32v7/alpine:3 AS final
+FROM arm32v7/alpine:3.14 AS final
 ARG version=0.0.0
 
 LABEL version=${version}
