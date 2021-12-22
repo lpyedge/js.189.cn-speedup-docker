@@ -38,8 +38,8 @@ ENV TZ=Asia/Shanghai \
 
 #包安装源切换到阿里云
 #修复alpine时区设置的问题
-RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories; \
-    apk add --no-cache \
+#RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories; \
+RUN apk add --no-cache \
             ca-certificates \
             tzdata \
             # .NET Core dependencies
