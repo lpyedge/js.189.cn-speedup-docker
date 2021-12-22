@@ -42,37 +42,37 @@ jobs:
         name: Build & PUSH
         run: |
         
-          DOCKER_BUILDKIT=1 docker build --platform linux/amd64 --build-arg version=$version --build-arg RID=x64 \
-            -f Dockerfile -t lpyedge/js.189.cn-speedup:linux-amd64 .
-          docker push lpyedge/js.189.cn-speedup:linux-amd64
-         
-          DOCKER_BUILDKIT=1 docker build --platform linux/arm64 --build-arg version=$version --build-arg RID=arm64 \
-            -f Dockerfile -t lpyedge/js.189.cn-speedup:linux-arm64 .
-          docker push lpyedge/js.189.cn-speedup:linux-arm64
-         
-          DOCKER_BUILDKIT=1 docker build --platform linux/arm32 --build-arg version=$version --build-arg RID=arm \
-            -f Dockerfile -t lpyedge/js.189.cn-speedup:linux-arm32 .
-          docker push lpyedge/js.189.cn-speedup:linux-arm32
-                   
-          docker manifest create lpyedge/js.189.cn-speedup \
-            lpyedge/js.189.cn-speedup:linux-amd64 \
-            lpyedge/js.189.cn-speedup:linux-arm64 \
-            lpyedge/js.189.cn-speedup:linux-arm32  
-          
-          docker manifest push lpyedge/js.189.cn-speedup
+#          DOCKER_BUILDKIT=1 docker build --platform linux/amd64 --build-arg version=$version --build-arg RID=x64 \
+#            -f Dockerfile -t lpyedge/js.189.cn-speedup:linux-amd64 .
+#          docker push lpyedge/js.189.cn-speedup:linux-amd64
+#         
+#          DOCKER_BUILDKIT=1 docker build --platform linux/arm64 --build-arg version=$version --build-arg RID=arm64 \
+#            -f Dockerfile -t lpyedge/js.189.cn-speedup:linux-arm64 .
+#          docker push lpyedge/js.189.cn-speedup:linux-arm64
+#         
+#          DOCKER_BUILDKIT=1 docker build --platform linux/arm32 --build-arg version=$version --build-arg RID=arm \
+#            -f Dockerfile -t lpyedge/js.189.cn-speedup:linux-arm32 .
+#          docker push lpyedge/js.189.cn-speedup:linux-arm32
+#                   
+#          docker manifest create lpyedge/js.189.cn-speedup \
+#            lpyedge/js.189.cn-speedup:linux-amd64 \
+#            lpyedge/js.189.cn-speedup:linux-arm64 \
+#            lpyedge/js.189.cn-speedup:linux-arm3 
+#          
+#          docker manifest push lpyedge/js.189.cn-speedup
 
-#           docker build -t lpyedge/js.189.cn-speedup:linux-x64 -f ./Dockerfile_linux-x64 --rm .
-#           docker build -t lpyedge/js.189.cn-speedup:linux-arm64 -f ./Dockerfile_linux-arm64 --rm .
-#           docker build -t lpyedge/js.189.cn-speedup:linux-arm32 -f ./Dockerfile_linux-arm32 --rm .
+           docker build -t lpyedge/js.189.cn-speedup:linux-amd64 --build-arg version=$version -f ./Dockerfile_linux-amd64 .
+           docker build -t lpyedge/js.189.cn-speedup:linux-arm64 --build-arg version=$version -f ./Dockerfile_linux-arm64 .
+           docker build -t lpyedge/js.189.cn-speedup:linux-arm32 --build-arg version=$version -f ./Dockerfile_linux-arm32 .
           
-#           docker push lpyedge/js.189.cn-speedup:linux-x64          
-#           docker push lpyedge/js.189.cn-speedup:linux-arm64          
-#           docker push lpyedge/js.189.cn-speedup:linux-arm32
+           docker push lpyedge/js.189.cn-speedup:linux-amd64          
+           docker push lpyedge/js.189.cn-speedup:linux-arm64          
+           docker push lpyedge/js.189.cn-speedup:linux-arm32
           
           
-#           docker manifest create lpyedge/js.189.cn-speedup \
-#             lpyedge/js.189.cn-speedup:linux-x64 \
-#             lpyedge/js.189.cn-speedup:linux-arm64 \
-#             lpyedge/js.189.cn-speedup:linux-arm32          
+           docker manifest create lpyedge/js.189.cn-speedup \
+             lpyedge/js.189.cn-speedup:linux-amd64 \
+             lpyedge/js.189.cn-speedup:linux-arm64 \
+             lpyedge/js.189.cn-speedup:linux-arm32          
           
-#           docker manifest push lpyedge/js.189.cn-speedup
+           docker manifest push lpyedge/js.189.cn-speedup
