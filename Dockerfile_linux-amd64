@@ -17,6 +17,7 @@ RUN dotnet publish "JSDXTS.csproj" -c Release -o /app/publish \
     /p:PublishSingleFile=true
 
 #https://m.imooc.com/article/316499
+#https://docs.microsoft.com/zh-cn/dotnet/core/rid-catalog
 #https://hub.docker.com/_/microsoft-dotnet-runtime-deps
 
 FROM amd64/alpine:3.14 AS final
