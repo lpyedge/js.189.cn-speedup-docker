@@ -20,12 +20,12 @@ RUN dotnet publish "JSDXTS.csproj" -c Release -o /app/publish \
 #https://docs.microsoft.com/zh-cn/dotnet/core/rid-catalog
 #https://hub.docker.com/_/microsoft-dotnet-runtime-deps
 
-FROM arm64v8/alpine:3.14 AS final
+FROM arm64v8/alpine:3 AS final
 ARG version=0.0.0
 
 LABEL version=${version}
 LABEL name="js.189.cn-speedup"
-LABEL url="https://hub.docker.com/repository/docker/lpyedge/js.189.cn-speedup"
+LABEL url="https://hub.docker.com/r/lpyedge/js.189.cn-speedup"
 LABEL email="lpyedge#163.com"
 
 ENV TZ=Asia/Shanghai \
@@ -37,26 +37,28 @@ ENV TZ=Asia/Shanghai \
     DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=true
 
 #包安装源切换到阿里云
-#修复alpine时区设置的问题
-#RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories; \
-RUN apk add --no-cache \
-            ca-certificates \
-            tzdata \
-            # .NET Core dependencies
-            krb5-libs \
-            libgcc \
-            libintl \
-            libssl1.1 \
-            libstdc++ \
-            zlib
+#RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories;
+#修复alpine时区设置的问题 && 增加.net core 基础依赖
+RUN apk upgrade && \
+    apk update && \
+    apk add --no-cache \
+        ca-certificates \
+        tzdata \
+        # .NET Core dependencies
+        krb5-libs \
+        libgcc \
+        libintl \
+        libssl1.1 \
+        libstdc++ \
+        zlib
 
 #复制编译完毕的程序
 WORKDIR /app
 COPY --from=publish /app/publish .
 
 #进程状态检查
-COPY healthcheck.sh .
-RUN chmod -R 777 /app/healthcheck.sh
-HEALTHCHECK --interval=15m --timeout=5s --start-period=30s CMD /app/healthcheck.sh JSDXTS
+COPY Health.sh .
+RUN chmod -R 777 /app/Health.sh
+HEALTHCHECK --interval=15m --timeout=5s --start-period=30s CMD /app/Health.sh JSDXTS
 
 ENTRYPOINT ["/app/JSDXTS"]
