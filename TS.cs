@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Security.Authentication;
-using System.Text;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
 using FluentScheduler;
 
@@ -74,42 +74,51 @@ namespace JSDXTS
             }
         }
         
-        private static HttpWebUtility _httpWebUtility()
+        private static HttpClient _httpClient()
         {
-            return new HttpWebUtility
-            {
-                UserAgent =
-                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 11_5_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36 Edg/92.0.902.62",
-            };
+            var client = new HttpClient();
+            client.DefaultRequestHeaders.UserAgent.TryParseAdd(
+                "Mozilla/5.0 (Macintosh; Intel Mac OS X 11_5_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36 Edg/92.0.902.62");
+            return client;
         }
 
         public static AccountModel GetAccountInfo()
         {
-            using (var wu = _httpWebUtility())
+            using (var client = _httpClient())
             {
-                wu.Accpet = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9";
-                var htmlStr = wu.ResponseAsync(UriTS.AccountInfo).Result;
-                var matchUserAccount = RegexTS.UserAccount.Match(htmlStr);
-                var matchAreaCode = RegexTS.AreaCode.Match(htmlStr);
-                if (matchUserAccount.Success && matchUserAccount.Groups[1].Success
-                                             && matchAreaCode.Success && matchAreaCode.Groups[1].Success)
-                    return new AccountModel
-                    {
-                        AreaCode = matchAreaCode.Groups[1].Value,
-                        UserAccount = matchUserAccount.Groups[1].Value
-                    };
+                client.DefaultRequestHeaders.Accept.TryParseAdd("text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
+
+                try
+                {
+                    var response = client.GetAsync(UriTS.AccountInfo).Result;
+                    response.EnsureSuccessStatusCode();
+                    var htmlStr= response.Content.ReadAsStringAsync().Result;
+                    
+                    var matchUserAccount = RegexTS.UserAccount.Match(htmlStr);
+                    var matchAreaCode = RegexTS.AreaCode.Match(htmlStr);
+                    if (matchUserAccount.Success && matchUserAccount.Groups[1].Success
+                                                 && matchAreaCode.Success && matchAreaCode.Groups[1].Success)
+                        return new AccountModel
+                        {
+                            AreaCode = matchAreaCode.Groups[1].Value,
+                            UserAccount = matchUserAccount.Groups[1].Value
+                        };
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
             }
-            return null;
+            return null!;
         }
 
         public static string GetAccountStatus(AccountModel accountInfo)
         {
-            using (var wu = _httpWebUtility())
+            using (var client = _httpClient())
             {
-                wu.Accpet =
-                    "application/json, text/javascript, */*; q=0.01";
+                client.DefaultRequestHeaders.Accept.TryParseAdd("application/json, text/javascript, */*; q=0.01");
 
-                var data = new Dictionary<string, dynamic>
+                var data = new Dictionary<string, string>
                 {
                     ["action"] = "ExperiencesSpeedModel",
                     ["isPostBk"] = "1",
@@ -117,22 +126,27 @@ namespace JSDXTS
                     ["AreaCode"] = accountInfo.AreaCode
                 };
 
-                var jsonStr = wu.ResponseAsync(UriTS.AccountStatus,
-                    HttpWebUtility.HttpMethod.POST,
-                    data).Result;
-
-                return jsonStr;
+                try
+                {
+                    var response = client.PostAsync(UriTS.AccountStatus,new FormUrlEncodedContent(data)).Result;
+                    response.EnsureSuccessStatusCode();
+                    return response.Content.ReadAsStringAsync().Result;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
             }
+            return String.Empty;
         }
 
         public static string ExecuteSpeedUp(AccountModel accountInfo)
         {
-            using (var wu = _httpWebUtility())
+            using (var client = _httpClient())
             {
-                wu.Accpet =
-                    "application/json, text/javascript, */*; q=0.01";
+                client.DefaultRequestHeaders.Accept.TryParseAdd("application/json, text/javascript, */*; q=0.01");
 
-                var data = new Dictionary<string, dynamic>
+                var data = new Dictionary<string, string>
                 {
                     ["action"] = "ExperiencesSpeedBegin",
                     ["isPostBk"] = "1",
@@ -140,12 +154,18 @@ namespace JSDXTS
                     ["AreaCode"] = accountInfo.AreaCode
                 };
 
-                var jsonStr = wu.ResponseAsync(UriTS.SpeedUP,
-                    HttpWebUtility.HttpMethod.POST,
-                    data).Result;
-
-                return jsonStr;
+                try
+                {
+                    var response = client.PostAsync(UriTS.SpeedUP,new FormUrlEncodedContent(data)).Result;
+                    response.EnsureSuccessStatusCode();
+                    return response.Content.ReadAsStringAsync().Result;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
             }
+            return String.Empty;
         }
 
 

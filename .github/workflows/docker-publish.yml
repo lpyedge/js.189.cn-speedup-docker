@@ -16,7 +16,7 @@ env:
 #  REGISTRY: ghcr.io
 #  # github.repository as <account>/<repo>
 #  IMAGE_NAME: ${{ github.repository }}
-  version: 0.7.5
+  version: 0.7.6
 
 jobs:
   build:
