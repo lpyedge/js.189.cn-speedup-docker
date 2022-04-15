@@ -5,9 +5,12 @@
 
 本镜像实现定时自动申请试用，理论上可以持续保持提速状态。敬请试用！！
 
+[![](https://badgen.net/badge/lpyedge/js.189.cn-speedup/blue?icon=docker)](https://hub.docker.com/r/lpyedge/js.189.cn-speedup)
+[![](https://badgen.net/docker/pulls/lpyedge/js.189.cn-speedup?icon=docker&label=pulls)](https://hub.docker.com/r/lpyedge/js.189.cn-speedup)
+[![](https://badgen.net/docker/stars/lpyedge/js.189.cn-speedup?icon=docker&label=stars)](https://hub.docker.com/r/lpyedge/js.189.cn-speedup)
 
-Docker Hub 地址
-[https://hub.docker.com/r/lpyedge/js.189.cn-speedup](https://hub.docker.com/r/lpyedge/js.189.cn-speedup)
+[![](https://badgen.net/badge/lpyedge/js.189.cn-speedup-docker/purple?icon=github)](https://github.com/lpyedge/js.189.cn-speedup-docker)
+[![](https://badgen.net/github/license/lpyedge/js.189.cn-speedup-docker?color=grey)](https://github.com/lpyedge/js.189.cn-speedup-docker/blob/main/LICENSE)
 
 
 ### 变量
